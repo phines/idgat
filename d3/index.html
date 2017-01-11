@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="normalize.css" type='text/css'/>
+<!--https://philipwalton.github.io/solved-by-flexbox/demos/vertical-centering/-->
+<style>.container_0{display:flex; align-items:center; justify-content:center; margin: 50px auto;} .container_1{max-width:70%;}</style>
+<style>.tooltip{background-color:#cccccc; color:#000000; line-height:1; border-radius:2px; padding:12px;}</style>
+<style>.vertex:hover{fill:#f5f5f5;}</style>
+
+
+
+<script type="text/javascript" src="lib/jquery-3.1.0.min.js"></script>
+<script type="text/javascript" src="lib/d3.min.js"></script>
+<script type="text/javascript" src="lib/d3-tip.js"></script>
+<script type="text/javascript" src="lib/d3-legend.min.js"></script>
+<script type="text/javascript" src="lib/d3-scale-chromatic.min.js"></script>
+<script type="text/javascript" src="lib/sprintf.min.js"></script>
+
+
+
+<div class="container_0"><div class="container_1"><svg id="svg"></svg></div></div>
+
+
+
+<script type="text/javascript">
+window.graph_only      = false;
+window.dd_base         = "gmp/78g1";
+window.dd_this         = "run_2015-july-1st-31st_xfo-to-load-direct";
+window.legend_position = "bottom-right"; // "top-left" | "top-right" | "bottom-left" | "bottom-right"
+window.max_clusters    = 12;
+</script>
+
+
+
+<script type="text/javascript" src="js/import-data.js"></script>
+<script type="text/javascript" src="js/plot-setup.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
