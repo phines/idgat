@@ -4,26 +4,21 @@ library(MASS)
 
 
 
-input_file       <- '~/tmp/gld/gmp/78g1/run_2015-july-1st-31st_xfo-to-load-direct/nam.csv'
-input_colClasses <- c("integer", "integer", "integer", "integer", "integer", "character")
-output_file      <- '~/tmp/gld/gmp/78g1/run_2015-july-1st-31st_xfo-to-load-direct/node-cluster.csv'
-
-how_many_clusters_to_group_the_data_into <- 10 # @k-means
-
-use_eds <- TRUE # Use Electrical Distances? (default: pseudo-inverse of the Laplacian of the "Y-bus")
+df <- read.csv('~/tmp/gld/gmp/78g1/run_2015-july-1st-31st_xfo-to-load-direct/nam.csv',
+	       colClasses = c("integer", "integer", "integer", "integer", "integer", "character"),
+	       header = T) %>%
+	as.tbl()
 
 
 
-df <- read.csv(input_file, colClasses = input_colClasses, header = TRUE) %>% as.tbl()
-
-Y   <- NULL
-Z   <- NULL
+Y <- NULL
+Z <- NULL
 PSZ <- NULL
 
 # Derive the *positive-sequence* representation of the nodal admittance/impedance matrix:
 for (str in df[["admittance"]]) {
 	v <- -eval(parse(text = str))
-	m <- matrix(v, nrow = sqrt(length(v)), byrow = TRUE)
+	m <- matrix(v, nrow = sqrt(length(v)), byrow = T)
 	M <- 1 / m
 	Y <- c(Y, lst(m))
 	Z <- c(Z, lst(M))
@@ -41,11 +36,13 @@ for (str in df[["admittance"]]) {
 	PSZ <- c(PSZ, psz)
 }
 
-dimnames(Y)   <- NULL
-dimnames(Z)   <- NULL
+dimnames(Y) <- NULL
+dimnames(Z) <- NULL
 dimnames(PSZ) <- NULL
 
-DF <- df %>% dplyr::select(-admittance) %>% mutate(Y = Y, Z = Z, PSZ = PSZ, PSY = 1/PSZ)
+DF <- df %>%
+	dplyr::select(-admittance) %>%
+	mutate(Y = Y, Z = Z, PSZ = PSZ, PSY = 1 / PSZ)
 
 
 
@@ -65,37 +62,36 @@ DM_imag <- Diagonal(x = rowSums(AM_imag))
 LM_real <- DM_real - AM_real
 LM_imag <- DM_imag - AM_imag
 
-# Moore-Penrose generalized inverse of LM:
-LM.ginv <- ginv(X = as.matrix(LM_real) + as.matrix(LM_imag) * 1i)
+# Generalized Inverse (Moore-Penrose) of LM:
+GI <- ginv(X = as.matrix(LM_real) + as.matrix(LM_imag) * 1i)
 
 
 
-if (use_eds) {
-	# Electrical Distance Matrix:
-	# (Equation 1 from
-	#  "Multi-Attribute Partitioning of Power Networks Based on Electrical Distance,"
-	#  Cotilla-Sanchez et al., IEEE Trans. Power Systems, Vol. 28, No. 4, November 2103.)
-	EDM <- matrix(0+0i, nrow = N, ncol = N)
-	for (i in 1:N) {
-		for(j in 1:N) {
-			EDM[i,j] <- LM.ginv[i,i] - LM.ginv[i,j] - LM.ginv[j,i] + LM.ginv[j,j]
-		}
+# Electrical Distance Matrix:
+# (Equation 1 from
+#  "Multi-Attribute Partitioning of Power Networks Based on Electrical Distance,"
+#  Cotilla-Sanchez et al., IEEE Trans. Power Systems, Vol. 28, No. 4, November 2103.)
+ED <- matrix(0+0i, nrow = N, ncol = N)
+for (i in 1:N) {
+	for(j in 1:N) {
+		ED[i,j] <- GI[i,i] - GI[i,j] - GI[j,i] + GI[j,j]
 	}
 }
 
 
 
-# K-Means Clustering on the Real & Imaginary components of LM.ginv (or EDM):
+# K-Means Clustering on the Real & Imaginary components of GI (or ED):
 set.seed(9)
-KM <- kmeans(x       = if (use_eds) cbind(Re(EDM), Im(EDM)) else cbind(Re(LM.ginv), Im(LM.ginv)),
-	     centers = how_many_clusters_to_group_the_data_into,
-	     nstart  = ceiling(0.1*N) # (i.e., use as many random sets as ~ 10% of the data)
-)
+KM <- kmeans(x = cbind(Re(ED), Im(ED)),
+	     centers = 10,
+	     nstart = ceiling(0.1*N))
 
 
 
-# Save/Report:
-write.csv(data.frame(cluster = KM$cluster), file = output_file, quote = F)
+# report & save:
 KM$size
 KM$cluster
 round(KM$betweenss / KM$totss, digits = 2)
+write.csv(data.frame(cluster = KM$cluster),
+	  file = '~/tmp/gld/gmp/78g1/run_2015-july-1st-31st_xfo-to-load-direct/node-cluster.csv',
+	  quote = F)

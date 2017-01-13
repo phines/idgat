@@ -91,35 +91,35 @@ function vi_mean(file,
 			if (flag_on && flag[df[i]["name"]] === 0) {
 				mA = aA = mB = aB = mC = aC = undefined;
 			} else {
-				if ((df[i]["mA_mean"] === undefined) || (df[i]["mA_mean"] === "NA") || (+df[i]["mA_mean"] === 0)) {
+				if ((df[i]["mA"] === undefined) || (df[i]["mA"] === "NA") || (+df[i]["mA"] === 0)) {
 					mA = undefined;
 				} else {
-					mA = sprintf("%.1f", +df[i]["mA_mean"]);
+					mA = sprintf("%.1f", +df[i]["mA"]);
 				}
-				if ((df[i]["aA_mean"] === undefined) || (df[i]["aA_mean"] === "NA") || (+df[i]["aA_mean"] === 0 && +df[i]["mA_mean"] === 0)) {
+				if ((df[i]["aA"] === undefined) || (df[i]["aA"] === "NA") || (+df[i]["aA"] === 0 && +df[i]["mA"] === 0)) {
 					aA = undefined;
 				} else {
-					aA = sprintf("%.1f", +df[i]["aA_mean"]);
+					aA = sprintf("%.1f", +df[i]["aA"]);
 				}
-				if ((df[i]["mB_mean"] === undefined) || (df[i]["mB_mean"] === "NA") || (+df[i]["mB_mean"] === 0)) {
+				if ((df[i]["mB"] === undefined) || (df[i]["mB"] === "NA") || (+df[i]["mB"] === 0)) {
 					mB = undefined;
 				} else {
-					mB = sprintf("%.1f", +df[i]["mB_mean"]);
+					mB = sprintf("%.1f", +df[i]["mB"]);
 				}
-				if ((df[i]["aB_mean"] === undefined) || (df[i]["aB_mean"] === "NA") || (+df[i]["aB_mean"] === 0 && +df[i]["mB_mean"] === 0)) {
+				if ((df[i]["aB"] === undefined) || (df[i]["aB"] === "NA") || (+df[i]["aB"] === 0 && +df[i]["mB"] === 0)) {
 					aB = undefined;
 				} else {
-					aB = sprintf("%.1f", +df[i]["aB_mean"]);
+					aB = sprintf("%.1f", +df[i]["aB"]);
 				}
-				if ((df[i]["mC_mean"] === undefined) || (df[i]["mC_mean"] === "NA") || (+df[i]["mC_mean"] === 0)) {
+				if ((df[i]["mC"] === undefined) || (df[i]["mC"] === "NA") || (+df[i]["mC"] === 0)) {
 					mC = undefined;
 				} else {
-					mC = sprintf("%.1f", +df[i]["mC_mean"]);
+					mC = sprintf("%.1f", +df[i]["mC"]);
 				}
-				if ((df[i]["aC_mean"] === undefined) || (df[i]["aC_mean"] === "NA") || (+df[i]["aC_mean"] === 0 && +df[i]["mC_mean"] === 0)) {
+				if ((df[i]["aC"] === undefined) || (df[i]["aC"] === "NA") || (+df[i]["aC"] === 0 && +df[i]["mC"] === 0)) {
 					aC = undefined;
 				} else {
-					aC = sprintf("%.1f", +df[i]["aC_mean"]);
+					aC = sprintf("%.1f", +df[i]["aC"]);
 				}
 			}
 			hoh[df[i]["name"]] = {

@@ -4,8 +4,7 @@ library(tidyr)
 
 
 # DATA PRE-REQUISITE: No NAs in the data.frame, as svd() shall fail.
-
-M <- read.csv("~/tmp/gld/gmp/78g1/run_2015-july-1st-31st_xfo-to-load-direct/1/node/voltage/SVD.CSV", header = TRUE) %>%
+M <- read.csv("~/tmp/gld/gmp/78g1/run_2015-july-1st-31st_xfo-to-load-direct/1/node/voltage/SVD.CSV", header = T) %>%
 	select(which(colSums(.) / nrow(.) != 7200)) %>% # (removes the "infinite" bus)
 	t()
 
@@ -38,9 +37,8 @@ k  <- 37
 	gather() %>%
 	mutate(x = rep((0:(nr-1) + 1:nr) / 2, times = nc),
 	       y = rep((0:(nc-1) + 1:nc) / 2, each  = nr)) %>%
-	mylibs$image_plot(
-		xlab    = 'node',
-		ylab    = 'time',
-		cblab   = 'Volts',
-		title   = paste('Actual minus SVD ', '(k = ', k, ')', sep = ''),
-		palette = 'RdBu')
+	mylibs$image_plot(xlab = 'node',
+			  ylab = 'time',
+			  cblab = 'Volts',
+			  title = paste('Actual minus SVD ', '(k = ', k, ')', sep = ''),
+			  palette = 'RdBu')
