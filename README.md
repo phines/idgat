@@ -1,2 +1,2 @@
-This project has been superceded by https://github.com/teslauvm/iDGA
-====================================================================
+This repo is completely out-of-date. 
+====================================
